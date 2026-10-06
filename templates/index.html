@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Bangalore House Price Prediction</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #141e30,
+                    #243b55
+                );
+
+            padding: 40px 15px;
+
+        }
+
+
+        .main-container {
+
+            max-width: 900px;
+
+            margin: auto;
+
+        }
+
+
+        .card {
+
+            border: none;
+
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.45);
+
+        }
+
+
+        .card-header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0d6efd,
+                    #0047ab
+                );
+
+            color: white;
+
+            text-align: center;
+
+            padding: 35px 20px;
+
+        }
+
+
+        .card-header h1 {
+
+            font-size: 32px;
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .card-header p {
+
+            margin: 0;
+
+            font-size: 16px;
+
+            opacity: 0.9;
+
+        }
+
+
+        .card-body {
+
+            background: white;
+
+            padding: 40px;
+
+        }
+
+
+        .form-label {
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+
+            color: #212529;
+
+        }
+
+
+        .form-control,
+        .form-select {
+
+            height: 52px;
+
+            border-radius: 10px;
+
+            border: 1px solid #ced4da;
+
+            padding: 10px 14px;
+
+            font-size: 16px;
+
+        }
+
+
+        .form-control:focus,
+        .form-select:focus {
+
+            border-color: #0d6efd;
+
+            box-shadow:
+                0 0 0 0.2rem
+                rgba(13, 110, 253, 0.15);
+
+        }
+
+
+        .predict-btn {
+
+            width: 100%;
+
+            height: 55px;
+
+            border-radius: 10px;
+
+            border: none;
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            margin-top: 5px;
+
+        }
+
+
+        .predict-btn:hover {
+
+            transform: translateY(-1px);
+
+        }
+
+
+        .result {
+
+            margin-top: 30px;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            background: #d1e7dd;
+
+            color: #0f5132;
+
+            text-align: center;
+
+            border: 1px solid #a3cfbb;
+
+        }
+
+
+        .result h4 {
+
+            margin: 0;
+
+            font-size: 22px;
+
+            font-weight: 700;
+
+        }
+
+
+        .footer {
+
+            text-align: center;
+
+            color: white;
+
+            margin-top: 25px;
+
+            opacity: 0.8;
+
+        }
+
+
+        @media (max-width: 768px) {
+
+            .card-body {
+
+                padding: 25px;
+
+            }
+
+            .card-header h1 {
+
+                font-size: 25px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container main-container">
+
+
+    <div class="card">
+
+
+        <!-- HEADER -->
+
+        <div class="card-header">
+
+            <h1>
+                🏠 Bangalore House Price Prediction
+            </h1>
+
+            <p>
+                Machine Learning Based House Price Estimator
+            </p>
+
+        </div>
+
+
+        <!-- BODY -->
+
+        <div class="card-body">
+
+
+
+<form id="predictionForm" method="POST">
+
+    <div class="row g-4">
+
+        <!-- LOCATION -->
+        <div class="col-md-6">
+
+            <label for="location" class="form-label">
+                Select Location
+            </label>
+
+            <select
+                id="location"
+                class="form-select"
+                name="location"
+                required>
+
+                <option value="" selected disabled>
+                    Select Location
+                </option>
+
+                {% for loc in location %}
+                    <option value="{{ loc }}">{{ loc }}</option>
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- BHK -->
+        <div class="col-md-6">
+
+            <label for="bhk" class="form-label">
+                Number of BHK
+            </label>
+
+            <input
+                type="number"
+                id="bhk"
+                class="form-control"
+                name="bhk"
+                placeholder="Example: 2"
+                min="1"
+                max="20"
+                required>
+
+        </div>
+
+
+        <!-- TOTAL SQFT -->
+        <div class="col-md-6">
+
+            <label for="total_sqft" class="form-label">
+                Total Area (Sqft)
+            </label>
+
+            <input
+                type="number"
+                id="total_sqft"
+                class="form-control"
+                name="total_sqft"
+                placeholder="Example: 1200"
+                min="100"
+                step="0.01"
+                required>
+
+        </div>
+
+
+        <!-- BATHROOM -->
+        <div class="col-md-6">
+
+            <label for="bath" class="form-label">
+                Number of Bathrooms
+            </label>
+
+            <input
+                type="number"
+                id="bath"
+                class="form-control"
+                name="bath"
+                placeholder="Example: 2"
+                min="1"
+                max="20"
+                required>
+
+        </div>
+
+
+        <!-- BALCONY -->
+        <div class="col-md-6">
+
+            <label for="balcony" class="form-label">
+                Number of Balconies
+            </label>
+
+            <input
+                type="number"
+                id="balcony"
+                class="form-control"
+                name="balcony"
+                placeholder="Example: 1"
+                min="0"
+                max="10"
+                required>
+
+        </div>
+
+
+        <!-- BUTTON -->
+        <div class="col-12">
+
+            <button
+                type="submit"
+                class="btn btn-primary predict-btn">
+
+                🔮 Predict House Price
+
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
+
+<script>
+    document.getElementById("predictionForm").addEventListener("submit", function () {
+        this.action = window.location.origin + "/predict";
+    });
+</script>
+
+
+
+
+            <!-- RESULT -->
+
+            {% if prediction_text %}
+
+                <div class="result">
+
+                    <h4>
+
+                        {{ prediction_text }}
+
+                    </h4>
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        <p>
+
+            © 2026 Bangalore House Price Prediction |
+            Machine Learning Project
+
+        </p>
+
+    </div>
+
+
+</div>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>
